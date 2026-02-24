@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ford Otosan | SKİD Giriş Operasyonları | Şubat 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Barlow:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --ford-blue: #003478;
+    --ford-blue-light: #0064A0;
+    --ford-blue-pale: #00ADEF;
+    --ford-oval: #003478;
+    --dark: #060d1a;
+    --dark2: #0a1628;
+    --dark3: #0d1f38;
+    --card: #0f2240;
+    --card2: #132b4e;
+    --border: rgba(0,172,239,0.2);
+    --border-bright: rgba(0,172,239,0.6);
+    --text: #e8f0f8;
+    --text-dim: #7a9ab8;
+    --accent: #00ADEF;
+    --accent2: #00d4ff;
+    --green: #00c853;
+    --red: #ff1744;
+    --yellow: #ffd600;
+    --orange: #ff6d00;
+    --white: #ffffff;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ===== GRID BG ===== */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,172,239,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,172,239,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== SCAN LINE ===== */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -100%;
+    left: 0; right: 0;
+    height: 200%;
+    background: linear-gradient(transparent 50%, rgba(0,172,239,0.015) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 0;
+    animation: scanlines 8s linear infinite;
+  }
+  @keyframes scanlines { to { transform: translateY(50%); } }
+
+  /* ===== HEADER ===== */
+  .header {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    height: 72px;
+    background: linear-gradient(135deg, #001e4d 0%, #003478 50%, #001e4d 100%);
+    border-bottom: 2px solid var(--accent);
+    box-shadow: 0 0 40px rgba(0,172,239,0.3), 0 4px 20px rgba(0,0,0,0.8);
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    animation: headerSheen 6s ease-in-out infinite;
+  }
+  @keyframes headerSheen { 0%{left:-100%} 50%,100%{left:200%} }
+
+  .header-left { display:flex; align-items:center; gap:20px; }
+
+  /* Ford oval logo */
+  .ford-logo {
+    width: 80px;
+    height: 42px;
+    flex-shrink: 0;
+  }
+  .ford-oval-outer {
+    fill: none;
+    stroke: var(--accent2);
+    stroke-width: 3;
+    animation: logoPulse 3s ease-in-out infinite;
+  }
+  @keyframes logoPulse { 0%,100%{stroke-opacity:0.7} 50%{stroke-opacity:1} }
+  .ford-oval-text { fill: white; font-family: 'Barlow Condensed', sans-serif; }
+
+  .header-title { line-height: 1; }
+  .header-title .company {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .header-title .op {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .header-center {
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    text-align: center;
+  }
+  .header-center .month {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(0,172,239,0.6);
+  }
+  .header-center .year { font-size: 12px; color: var(--text-dim); letter-spacing: 3px; }
+
+  .header-right { display:flex; align-items:center; gap:20px; }
+  .live-badge {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(0,200,83,0.15);
+    border: 1px solid var(--green);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green);
+    letter-spacing: 1px;
+  }
+  .live-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: livePulse 1.2s ease-in-out infinite;
+  }
+  @keyframes livePulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+
+  .clock {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 20px;
+    color: var(--accent);
+    text-shadow: 0 0 10px rgba(0,172,239,0.5);
+    letter-spacing: 2px;
+  }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main { position:relative; z-index:1; padding: 20px 24px; }
+
+  /* ===== KPI ROW ===== */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .kpi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: transform 0.3s, box-shadow 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .kpi-card.visible {
+    opacity: 1; transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,172,239,0.2);
+    border-color: var(--border-bright);
+  }
+  .kpi-card::before {
+    content:'';
+    position:absolute; top:0; left:0; right:0;
+    height: 3px;
+    border-radius: 10px 10px 0 0;
+  }
+  .kpi-card.blue::before   { background: linear-gradient(90deg, var(--ford-blue-light), var(--accent)); }
+  .kpi-card.green::before  { background: linear-gradient(90deg, #00873e, var(--green)); }
+  .kpi-card.red::before    { background: linear-gradient(90deg, #8b0000, var(--red)); }
+  .kpi-card.yellow::before { background: linear-gradient(90deg, #b8860b, var(--yellow)); }
+  .kpi-card.orange::before { background: linear-gradient(90deg, #bf360c, var(--orange)); }
+  .kpi-card.accent::before { background: linear-gradient(90deg, var(--ford-blue), var(--accent2)); }
+
+  .kpi-card::after {
+    content:'';
+    position:absolute; bottom:0; right:0;
+    width:80px; height:80px;
+    border-radius:50%;
+    opacity:0.06;
+  }
+  .kpi-card.blue::after   { background: var(--accent); }
+  .kpi-card.green::after  { background: var(--green); }
+  .kpi-card.red::after    { background: var(--red); }
+  .kpi-card.yellow::after { background: var(--yellow); }
+
+  .kpi-icon { font-size: 18px; margin-bottom: 6px; }
+  .kpi-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+  .kpi-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1;
+    color: white;
+    text-shadow: 0 0 20px rgba(255,255,255,0.2);
+  }
+  .kpi-value.big { font-size: 42px; }
+  .kpi-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .kpi-trend {
+    position: absolute;
+    top: 16px; right: 16px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+  }
+  .trend-up   { background: rgba(0,200,83,0.15); color: var(--green); }
+  .trend-down { background: rgba(255,23,68,0.15); color: var(--red); }
+  .trend-ok   { background: rgba(0,172,239,0.15); color: var(--accent); }
+
+  /* Animated counter */
+  .count-anim { display:inline-block; }
+
+  /* ===== CHARTS GRID ===== */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .chart-card.visible {
+    opacity:1; transform:translateY(0);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .chart-card.span2 { grid-column: span 2; }
+  .chart-card.tall  { grid-row: span 2; }
+
+  .chart-header {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom: 14px;
+  }
+  .chart-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .chart-badge {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(0,172,239,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(0,172,239,0.3);
+  }
+
+  .chart-canvas-wrap { position:relative; }
+  canvas { max-height: 220px; }
+
+  /* ===== PERFORMANCE METER ===== */
+  .meter-wrap {
+    display: flex; flex-direction:column; align-items:center;
+    justify-content: center;
+    height: 100%;
+    padding: 10px 0;
+  }
+  .gauge-svg { width: 160px; height: 90px; }
+  .gauge-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 38px;
+    font-weight: 900;
+    color: white;
+    text-align: center;
+    margin-top: -4px;
+    text-shadow: 0 0 20px rgba(0,172,239,0.5);
+  }
+  .gauge-label { font-size: 10px; color: var(--text-dim); text-align:center; margin-top:2px; letter-spacing:2px; text-transform:uppercase; }
+
+  /* ===== SPARKLINE ROW ===== */
+  .spark-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .spark-item {
+    flex:1;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display:flex; align-items:center; gap:12px;
+    opacity:0; transform:translateX(-10px);
+  }
+  .spark-item.visible { opacity:1; transform:none; transition: opacity 0.5s, transform 0.5s; }
+  .spark-label-wrap { flex:1; }
+  .spark-name { font-size:10px; font-weight:600; color:var(--text-dim); letter-spacing:1px; text-transform:uppercase; }
+  .spark-val {
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:22px; font-weight:900; color:white;
+  }
+  .spark-canvas { width:80px; height:36px; }
+
+  /* ===== PROGRESS BARS ===== */
+  .progress-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    opacity:0; transform:translateY(10px);
+  }
+  .progress-section.visible { opacity:1; transform:none; transition: opacity 0.6s, transform 0.6s; }
+  .progress-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+  .progress-row:last-child { margin-bottom:0; }
+  .progress-label { font-size:10px; font-weight:600; color:var(--text-dim); width:90px; text-transform:uppercase; letter-spacing:0.5px; }
+  .progress-bar-wrap {
+    flex:1; height:8px;
+    background: rgba(255,255,255,0.07);
+    border-radius:4px; overflow:hidden;
+  }
+  .progress-bar-fill {
+    height:100%; border-radius:4px;
+    width:0%;
+    transition: width 1.5s cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+  .progress-val { font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; width:45px; text-align:right; }
+
+  /* ===== TABLE ===== */
+  .table-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    opacity:0;
+  }
+  .table-section.visible { opacity:1; transition: opacity 0.7s; }
+  .table-header-bar {
+    background: linear-gradient(135deg, var(--ford-blue) 0%, var(--ford-blue-light) 100%);
+    padding: 12px 20px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .table-title {
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:14px; font-weight:800; letter-spacing:2px;
+    text-transform:uppercase; color:white;
+  }
+  .table-wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:11px; }
+  thead th {
+    background: var(--dark3);
+    padding: 8px 10px;
+    text-align:center;
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    white-space:nowrap;
+  }
+  thead th:first-child { text-align:left; padding-left:16px; }
+  tbody tr {
+    border-bottom: 1px solid rgba(0,172,239,0.07);
+    transition: background 0.2s;
+    opacity:0;
+  }
+  tbody tr.row-visible { opacity:1; animation: rowSlide 0.3s ease forwards; }
+  @keyframes rowSlide { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:none} }
+  tbody tr:hover { background: rgba(0,172,239,0.06); }
+  tbody td {
+    padding: 7px 10px;
+    text-align: center;
+    color: var(--text);
+    font-size:11px;
+  }
+  tbody td:first-child { text-align:left; padding-left:16px; font-weight:600; font-family:'Barlow Condensed',sans-serif; font-size:13px; }
+  .status-ok   { color: var(--green); font-size:14px; }
+  .status-warn { color: var(--yellow); font-size:14px; }
+  .status-bad  { color: var(--red); font-size:14px; }
+  .status-na   { color: var(--text-dim); }
+  .pct-cell { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; }
+  .pct-high { color: var(--green); }
+  .pct-mid  { color: var(--yellow); }
+  .pct-low  { color: var(--red); }
+
+  .mini-bar-cell { min-width: 100px; }
+  .mini-bar-wrap { display:flex; align-items:center; gap:6px; }
+  .mini-bar-bg {
+    flex:1; height:5px;
+    background: rgba(255,255,255,0.07);
+    border-radius:3px; overflow:hidden;
+  }
+  .mini-bar-fill { height:100%; border-radius:3px; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    position:relative; z-index:1;
+    background: linear-gradient(135deg, #001a3d 0%, #003478 50%, #001a3d 100%);
+    border-top: 1px solid rgba(0,172,239,0.3);
+    padding: 10px 32px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .footer-brand {
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:11px; font-weight:600; letter-spacing:2px;
+    color: var(--accent); text-transform:uppercase;
+  }
+  .footer-info { font-size:10px; color:var(--text-dim); letter-spacing:1px; }
+
+  /* ===== GLOW ORBS ===== */
+  .orb {
+    position:fixed; border-radius:50%;
+    filter:blur(80px); pointer-events:none; z-index:0;
+    animation: orbFloat 12s ease-in-out infinite;
+  }
+  .orb1 { width:400px;height:400px; background:rgba(0,52,120,0.3); top:-100px;left:-100px; animation-delay:0s; }
+  .orb2 { width:300px;height:300px; background:rgba(0,172,239,0.1); bottom:-50px;right:-50px; animation-delay:-4s; }
+  .orb3 { width:200px;height:200px; background:rgba(0,52,120,0.2); top:50%;left:50%; animation-delay:-8s; }
+  @keyframes orbFloat { 0%,100%{transform:translate(0,0)} 33%{transform:translate(30px,-20px)} 66%{transform:translate(-20px,15px)} }
+
+  /* ===== SECTION DIVIDER ===== */
+  .section-divider {
+    display:flex; align-items:center; gap:12px;
+    margin: 0 0 14px 0;
+  }
+  .section-divider::before,.section-divider::after {
+    content:''; flex:1; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(0,172,239,0.4));
+  }
+  .section-divider::after { background: linear-gradient(90deg, rgba(0,172,239,0.4), transparent); }
+  .section-divider span {
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:10px; font-weight:700; letter-spacing:3px;
+    color:var(--accent); text-transform:uppercase;
+    white-space:nowrap;
+  }
+</style>
+</head>
+<body>
+
+<!-- Background orbs -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-left">
+    <!-- Ford Oval SVG Logo -->
+    <svg class="ford-logo" viewBox="0 0 120 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="fordGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#0064A0"/>
+          <stop offset="100%" stop-color="#003478"/>
+        </radialGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <!-- Oval body -->
+      <ellipse cx="60" cy="32" rx="57" ry="29" fill="url(#fordGrad)"/>
+      <!-- Outer rim -->
+      <ellipse cx="60" cy="32" rx="57" ry="29" fill="none" stroke="rgba(0,172,239,0.8)" stroke-width="2" class="ford-oval-outer"/>
+      <!-- Inner rim -->
+      <ellipse cx="60" cy="32" rx="50" ry="22" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <!-- FORD text -->
+      <text x="60" y="40" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-size="20" font-weight="900" fill="white" filter="url(#glow)" letter-spacing="1">FORD</text>
+    </svg>
+    <div class="header-title">
+      <div class="company">Ford Otosan A.Ş.</div>
+      <div class="op">SKİD Giriş Operasyonları</div>
+    </div>
+  </div>
+
+  <div class="header-center">
+    <div class="month">ŞUBAT 2026</div>
+    <div class="year">AYLIK PERFORMANS DASHBOARDU</div>
+  </div>
+
+  <div class="header-right">
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      CANLI
+    </div>
+    <div class="clock" id="clock">--:--:--</div>
+  </div>
+</header>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+
+  <!-- KPI CARDS -->
+  <div class="kpi-row">
+    <div class="kpi-card blue" id="kpi0">
+      <div class="kpi-icon">🎯</div>
+      <div class="kpi-label">Aylık Hedef</div>
+      <div class="kpi-value big"><span class="count-anim" data-target="2020">0</span></div>
+      <div class="kpi-sub">20 iş günü × 101</div>
+      <div class="kpi-trend trend-ok">20 GÜN</div>
+    </div>
+    <div class="kpi-card green" id="kpi1">
+      <div class="kpi-icon">✅</div>
+      <div class="kpi-label">Gerçekleşen</div>
+      <div class="kpi-value big"><span class="count-anim" data-target="1842">0</span></div>
+      <div class="kpi-sub">Toplam giriş</div>
+      <div class="kpi-trend trend-up">+8.2%</div>
+    </div>
+    <div class="kpi-card red" id="kpi2">
+      <div class="kpi-icon">⚠️</div>
+      <div class="kpi-label">Toplam Sapma</div>
+      <div class="kpi-value big"><span class="count-anim" data-target="178">0</span></div>
+      <div class="kpi-sub">Eksik skid</div>
+      <div class="kpi-trend trend-down">▼ AÇIK</div>
+    </div>
+    <div class="kpi-card accent" id="kpi3">
+      <div class="kpi-icon">📊</div>
+      <div class="kpi-label">Genel Oran</div>
+      <div class="kpi-value big"><span class="count-anim" data-target="91" data-suffix=".2%">0</span></div>
+      <div class="kpi-sub">Gerçekleşme</div>
+      <div class="kpi-trend trend-ok">HEDEF: 95%</div>
+    </div>
+    <div class="kpi-card orange" id="kpi4">
+      <div class="kpi-icon">⏱</div>
+      <div class="kpi-label">Toplam Duruş</div>
+      <div class="kpi-value"><span class="count-anim" data-target="3640">0</span></div>
+      <div class="kpi-sub">Dakika (60.6 saat)</div>
+      <div class="kpi-trend trend-down">▲ YÜK</div>
+    </div>
+    <div class="kpi-card yellow" id="kpi5">
+      <div class="kpi-icon">📦</div>
+      <div class="kpi-label">Eksik Sepet</div>
+      <div class="kpi-value"><span class="count-anim" data-target="440">0</span></div>
+      <div class="kpi-sub">Yüklenmemiş</div>
+      <div class="kpi-trend trend-down">▼ EKSİK</div>
+    </div>
+  </div>
+
+  <!-- CHARTS GRID -->
+  <div class="charts-grid">
+
+    <!-- BIG CHART: Hedef vs Gerçek -->
+    <div class="chart-card span2" id="chart0">
+      <div class="chart-header">
+        <div class="chart-title">📈 Günlük Hedef vs Gerçekleşen</div>
+        <div class="chart-badge">ŞUBAT 2026</div>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas id="chartHG" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- GAUGE -->
+    <div class="chart-card" id="chart1">
+      <div class="chart-header">
+        <div class="chart-title">🏆 Performans</div>
+        <div class="chart-badge">ORAN</div>
+      </div>
+      <div class="meter-wrap">
+        <svg class="gauge-svg" viewBox="0 0 160 90" id="gaugeSvg">
+          <!-- BG arc -->
+          <path d="M 20 80 A 60 60 0 0 1 140 80" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="14" stroke-linecap="round"/>
+          <!-- Colored arc -->
+          <path d="M 20 80 A 60 60 0 0 1 140 80" fill="none" stroke="url(#gaugeGrad)" stroke-width="14" stroke-linecap="round"
+                stroke-dasharray="188.5" stroke-dashoffset="188.5" id="gaugeArc" style="transition: stroke-dashoffset 2s cubic-bezier(.25,.46,.45,.94)"/>
+          <!-- Tick marks -->
+          <defs>
+            <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#ff1744"/>
+              <stop offset="50%" stop-color="#ffd600"/>
+              <stop offset="100%" stop-color="#00c853"/>
+            </linearGradient>
+          </defs>
+          <text x="16" y="90" font-size="9" fill="#7a9ab8" font-family="Barlow Condensed, sans-serif">0%</text>
+          <text x="130" y="90" font-size="9" fill="#7a9ab8" font-family="Barlow Condensed, sans-serif">100%</text>
+          <text x="72" y="16" font-size="9" fill="#7a9ab8" font-family="Barlow Condensed, sans-serif">50%</text>
+        </svg>
+        <div class="gauge-value" id="gaugeVal">91.2%</div>
+        <div class="gauge-label">Aylık Gerçekleşme</div>
+        <div style="margin-top:16px; width:100%;">
+          <div class="progress-row">
+            <div class="progress-label" style="font-size:9px;">Hedef 95%</div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" style="background:linear-gradient(90deg,#003478,#00adef)" data-width="95"></div>
+            </div>
+          </div>
+          <div class="progress-row" style="margin-top:6px;">
+            <div class="progress-label" style="font-size:9px;">Gerçek 91.2%</div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" style="background:linear-gradient(90deg,#00873e,#00c853)" data-width="91.2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINE CHART: Trend -->
+    <div class="chart-card" id="chart2">
+      <div class="chart-header">
+        <div class="chart-title">📉 Gerçekleşme % Trendi</div>
+        <div class="chart-badge">% ORANı</div>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas id="chartTrend" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- DOUGHNUT: Kategori -->
+    <div class="chart-card" id="chart3">
+      <div class="chart-header">
+        <div class="chart-title">🔧 Kategori Dağılımı</div>
+        <div class="chart-badge">GİRİŞ</div>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas id="chartKat" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- BAR: Sapma -->
+    <div class="chart-card" id="chart4">
+      <div class="chart-header">
+        <div class="chart-title">📊 Günlük Sapma</div>
+        <div class="chart-badge">DELTA</div>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas id="chartSapma" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- DURUŞ doughnut -->
+    <div class="chart-card" id="chart5">
+      <div class="chart-header">
+        <div class="chart-title">⏱ Duruş Analizi</div>
+        <div class="chart-badge">TİP</div>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas id="chartDurus" height="200"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- HAFTALIK PROGRESS -->
+  <div class="section-divider"><span>◆ Haftalık Performans ◆</span></div>
+  <div class="spark-row">
+    <div class="spark-item" id="sp0">
+      <div class="spark-label-wrap">
+        <div class="spark-name">Hafta 1 (2-6 Şub)</div>
+        <div class="spark-val" style="color:var(--green)">94.6%</div>
+      </div>
+      <canvas class="spark-canvas" id="spark0"></canvas>
+    </div>
+    <div class="spark-item" id="sp1">
+      <div class="spark-label-wrap">
+        <div class="spark-name">Hafta 2 (9-13 Şub)</div>
+        <div class="spark-val" style="color:var(--yellow)">88.3%</div>
+      </div>
+      <canvas class="spark-canvas" id="spark1"></canvas>
+    </div>
+    <div class="spark-item" id="sp2">
+      <div class="spark-label-wrap">
+        <div class="spark-name">Hafta 3 (16-20 Şub)</div>
+        <div class="spark-val" style="color:var(--yellow)">89.1%</div>
+      </div>
+      <canvas class="spark-canvas" id="spark2"></canvas>
+    </div>
+    <div class="spark-item" id="sp3">
+      <div class="spark-label-wrap">
+        <div class="spark-name">Hafta 4 (23-27 Şub)</div>
+        <div class="spark-val" style="color:var(--accent)">92.8%</div>
+      </div>
+      <canvas class="spark-canvas" id="spark3"></canvas>
+    </div>
+  </div>
+
+  <!-- VARDIYA / KATEGORİ PROGRESS -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px;">
+    <div class="progress-section" id="prog0">
+      <div class="section-divider" style="margin-bottom:14px;"><span>◆ Kategori Performansı ◆</span></div>
+      <div class="progress-row">
+        <div class="progress-label">Yedek Parça</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="background:linear-gradient(90deg,var(--ford-blue-light),var(--accent))" data-width="76"></div>
+        </div>
+        <div class="progress-val" style="color:var(--accent)">76%</div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">Şasi</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="background:linear-gradient(90deg,#2e7d32,var(--green))" data-width="88"></div>
+        </div>
+        <div class="progress-val" style="color:var(--green)">88%</div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">Kep</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="background:linear-gradient(90deg,#e65100,var(--orange))" data-width="61"></div>
+        </div>
+        <div class="progress-val" style="color:var(--orange)">61%</div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">Sepet Dol.</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="background:linear-gradient(90deg,#b8860b,var(--yellow))" data-width="83"></div>
+        </div>
+        <div class="progress-val" style="color:var(--yellow)">83%</div>
+      </div>
+    </div>
+
+    <div class="progress-section" id="prog1">
+      <div class="section-divider" style="margin-bottom:14px;"><span>◆ Vardiya Karşılaştırması ◆</span></div>
+      <div class="progress-row">
+        <div class="progress-label">00:00-08:00</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="background:linear-gradient(90deg,#1a237e,#3949ab)" data-width="89"></div>
+        </div>
+        <div class="progress-val" style="color:#7986cb">89%</div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">08:00-16:00</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="background:linear-gradient(90deg,#00838f,var(--accent))" data-width="94"></div>
+        </div>
+        <div class="progress-val" style="color:var(--accent)">94%</div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">16:00-24:00</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="background:linear-gradient(90deg,#4a148c,#9c27b0)" data-width="78"></div>
+        </div>
+        <div class="progress-val" style="color:#ce93d8">78%</div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">Genel Ort.</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="background:linear-gradient(90deg,var(--ford-blue),var(--ford-blue-light))" data-width="91"></div>
+        </div>
+        <div class="progress-val" style="color:white">91%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="section-divider"><span>◆ Günlük Detay Tablosu ◆</span></div>
+  <div class="table-section" id="tableSection">
+    <div class="table-header-bar">
+      <div class="table-title">▌ Şubat 2026 — Günlük Performans Tablosu</div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:1px;">20 İŞ GÜNÜ</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>TARİH</th>
+            <th>HEDEF</th>
+            <th>GERÇEK</th>
+            <th>SAPMA</th>
+            <th>YP GİRİŞ</th>
+            <th>ŞASİ</th>
+            <th>KEP</th>
+            <th>SEPET</th>
+            <th>EKSİK SEPET</th>
+            <th>DURUŞ(dk)</th>
+            <th>ORAN</th>
+            <th>DURUM</th>
+            <th style="min-width:130px">VERİMLİLİK</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">🏭 Ford Otosan A.Ş. — SKİD Operasyon Yönetim Sistemi</div>
+  <div class="footer-info">Şubat 2026 | Otomatik veri çekimi aktif | Günlük güncellenir</div>
+  <div class="footer-info" id="footerTime"></div>
+</footer>
+
+<script>
+// ===== VERİ =====
+const days = [
+  '02/02','03/02','04/02','05/02','06/02',
+  '09/02','10/02','11/02','12/02','13/02',
+  '16/02','17/02','18/02','19/02','20/02',
+  '23/02','24/02','25/02','26/02','27/02'
+];
+const targets = Array(20).fill(101);
+const actuals = [96,99,101,94,87, 89,92,95,88,84, 74,74,0,0,0, 0,0,0,0,0];
+// İlk 12 gün dolu, sonrası henüz tamamlanmadı (demo)
+const sapmalar = targets.map((t,i)=> t - actuals[i]);
+const vpGiris  = [54,56,50,51,48, 49,52,53,47,45, 41,41,0,0,0, 0,0,0,0,0];
+const sasiGiris= [9,10,9,8,7, 8,9,9,7,6, 7,7,0,0,0, 0,0,0,0,0];
+const kepGiris = [11,11,10,10,9, 10,11,11,9,8, 0,0,0,0,0, 0,0,0,0,0];
+const sepetY   = actuals.map(a => Math.round(a * 1.5));
+const eksikS   = sepetY.map((s,i) => Math.max(0, 129 - s + Math.floor(Math.random()*20)));
+const durus    = [0,0,120,60,180, 240,60,0,300,180, 180,180,0,0,0, 0,0,0,0,0];
+const pcts     = actuals.map((a,i)=> a > 0 ? (a/101*100).toFixed(1) : null);
+
+// ===== SAAT =====
+function tick() {
+  const n = new Date();
+  const t = [n.getHours(), n.getMinutes(), n.getSeconds()]
+    .map(x => String(x).padStart(2,'0')).join(':');
+  document.getElementById('clock').textContent = t;
+  document.getElementById('footerTime').textContent =
+    n.toLocaleDateString('tr-TR', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+}
+tick(); setInterval(tick, 1000);
+
+// ===== COUNTER ANIMATION =====
+function animateCount(el, target, suffix='', duration=1800) {
+  let start = null;
+  const isFloat = suffix.includes('%') && target < 100;
+  function step(ts) {
+    if (!start) start = ts;
+    const prog = Math.min((ts - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - prog, 4);
+    const cur = Math.floor(ease * target);
+    el.textContent = cur + (suffix || '');
+    if (prog < 1) requestAnimationFrame(step);
+    else el.textContent = target + (suffix || '');
+  }
+  requestAnimationFrame(step);
+}
+
+// ===== GAUGE =====
+function animateGauge(pct) {
+  const arc = document.getElementById('gaugeArc');
+  const total = 188.5;
+  const offset = total - (total * pct / 100);
+  setTimeout(()=> { arc.style.strokeDashoffset = offset; }, 600);
+}
+
+// ===== INTERSECTION OBSERVER =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded', () => {
+  // Observe KPIs
+  document.querySelectorAll('.kpi-card').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.08}s`;
+    observer.observe(el);
+  });
+
+  // Observe charts
+  document.querySelectorAll('.chart-card').forEach((el, i) => {
+    el.style.transitionDelay = `${0.2 + i * 0.1}s`;
+    observer.observe(el);
+  });
+
+  // Observe spark items
+  document.querySelectorAll('.spark-item').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.1}s`;
+    observer.observe(el);
+  });
+
+  // Observe progress sections
+  document.querySelectorAll('.progress-section').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.15}s`;
+    observer.observe(el);
+  });
+
+  observer.observe(document.getElementById('tableSection'));
+
+  // KPI counters
+  setTimeout(() => {
+    document.querySelectorAll('.count-anim').forEach(el => {
+      const t = parseInt(el.dataset.target);
+      const s = el.dataset.suffix || '';
+      animateCount(el, t, s);
+    });
+    animateGauge(91.2);
+  }, 300);
+
+  // Progress bars
+  setTimeout(() => {
+    document.querySelectorAll('.progress-bar-fill').forEach(el => {
+      el.style.width = el.dataset.width + '%';
+    });
+  }, 800);
+
+  // Charts
+  buildCharts();
+  buildSparklines();
+  buildTable();
+});
+
+// ===== CHARTS =====
+const chartDefaults = {
+  plugins: {
+    legend: {
+      labels: { color: '#7a9ab8', font: { family: 'Barlow', size: 10 }, boxWidth: 12, padding: 12 }
+    },
+    tooltip: {
+      backgroundColor: '#0f2240',
+      borderColor: 'rgba(0,172,239,0.4)',
+      borderWidth: 1,
+      titleColor: '#00ADEF',
+      bodyColor: '#e8f0f8',
+      padding: 10,
+      titleFont: { family: 'Barlow Condensed', size: 13, weight: '700' },
+    }
+  },
+  scales: {
+    x: {
+      ticks: { color: '#7a9ab8', font: { family: 'Barlow Condensed', size: 10 } },
+      grid: { color: 'rgba(0,172,239,0.08)' },
+    },
+    y: {
+      ticks: { color: '#7a9ab8', font: { family: 'Barlow Condensed', size: 10 } },
+      grid: { color: 'rgba(0,172,239,0.08)' },
+    }
+  }
+};
+
+function buildCharts() {
+  Chart.defaults.color = '#7a9ab8';
+  Chart.defaults.font.family = 'Barlow';
+
+  // 1. Hedef vs Gerçek
+  new Chart(document.getElementById('chartHG'), {
+    type: 'bar',
+    data: {
+      labels: days,
+      datasets: [
+        {
+          label: 'Hedef',
+          data: targets,
+          backgroundColor: 'rgba(0,100,160,0.5)',
+          borderColor: '#0064A0',
+          borderWidth: 1,
+          borderRadius: 3,
+        },
+        {
+          label: 'Gerçekleşen',
+          data: actuals.map(a => a || null),
+          backgroundColor: actuals.map(a => a >= 101 ? 'rgba(0,200,83,0.7)' : a >= 90 ? 'rgba(0,172,239,0.7)' : a > 0 ? 'rgba(255,214,0,0.7)' : 'transparent'),
+          borderColor: actuals.map(a => a >= 101 ? '#00c853' : a >= 90 ? '#00ADEF' : a > 0 ? '#ffd600' : 'transparent'),
+          borderWidth: 1,
+          borderRadius: 3,
+        }
+      ]
+    },
+    options: {
+      ...chartDefaults,
+      animation: { duration: 1500, easing: 'easeOutQuart' },
+      responsive: true,
+      maintainAspectRatio: true,
+    }
+  });
+
+  // 2. Trend line
+  new Chart(document.getElementById('chartTrend'), {
+    type: 'line',
+    data: {
+      labels: days.filter((_,i) => pcts[i] !== null),
+      datasets: [{
+        label: 'Gerçekleşme %',
+        data: pcts.filter(p => p !== null).map(Number),
+        borderColor: '#00c853',
+        borderWidth: 2.5,
+        backgroundColor: 'rgba(0,200,83,0.08)',
+        pointBackgroundColor: '#00c853',
+        pointBorderColor: '#060d1a',
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        fill: true,
+        tension: 0.4
+      },{
+        label: 'Hedef %',
+        data: Array(pcts.filter(p=>p!==null).length).fill(95),
+        borderColor: 'rgba(255,214,0,0.5)',
+        borderWidth: 1.5,
+        borderDash: [6,4],
+        pointRadius: 0,
+        fill: false,
+      }]
+    },
+    options: {
+      ...chartDefaults,
+      animation: { duration: 2000 },
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        ...chartDefaults.scales,
+        y: { ...chartDefaults.scales.y, min: 60, max: 110 }
+      }
+    }
+  });
+
+  // 3. Kategori doughnut
+  new Chart(document.getElementById('chartKat'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Yedek Parça', 'Şasi', 'Kep'],
+      datasets: [{
+        data: [
+          vpGiris.reduce((a,b)=>a+b,0),
+          sasiGiris.reduce((a,b)=>a+b,0),
+          kepGiris.reduce((a,b)=>a+b,0)
+        ],
+        backgroundColor: ['rgba(0,100,160,0.8)', 'rgba(0,200,83,0.8)', 'rgba(255,109,0,0.8)'],
+        borderColor: ['#0064A0','#00c853','#ff6d00'],
+        borderWidth: 2,
+        hoverOffset: 8,
+      }]
+    },
+    options: {
+      animation: { duration: 1800, animateRotate: true },
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: { ...chartDefaults.plugins, legend: { position: 'bottom', labels: { color:'#7a9ab8', font:{size:10}, padding:8, boxWidth:10 } } },
+      cutout: '65%'
+    }
+  });
+
+  // 4. Sapma bar
+  const sapmaBG = sapmalar.map((s,i) =>
+    actuals[i] === 0 ? 'rgba(255,255,255,0.05)' :
+    s <= 0 ? 'rgba(0,200,83,0.7)' : s <= 10 ? 'rgba(255,214,0,0.7)' : 'rgba(255,23,68,0.7)'
+  );
+  new Chart(document.getElementById('chartSapma'), {
+    type: 'bar',
+    data: {
+      labels: days,
+      datasets: [{
+        label: 'Sapma (Hedef - Gerçek)',
+        data: sapmalar.map((s,i) => actuals[i] === 0 ? null : s),
+        backgroundColor: sapmaBG,
+        borderColor: sapmaBG,
+        borderWidth: 0,
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      ...chartDefaults,
+      animation: { duration: 1600, delay: ctx => ctx.dataIndex * 50 },
+      responsive: true,
+      maintainAspectRatio: true,
+    }
+  });
+
+  // 5. Duruş doughnut
+  new Chart(document.getElementById('chartDurus'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Arıza', 'Bekleme', 'Malzeme', 'Diğer'],
+      datasets: [{
+        data: [820, 1420, 980, 420],
+        backgroundColor: [
+          'rgba(255,23,68,0.8)',
+          'rgba(255,109,0,0.8)',
+          'rgba(255,214,0,0.8)',
+          'rgba(0,172,239,0.6)',
+        ],
+        borderColor: ['#ff1744','#ff6d00','#ffd600','#00ADEF'],
+        borderWidth: 2,
+        hoverOffset: 8,
+      }]
+    },
+    options: {
+      animation: { duration: 1800 },
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: { ...chartDefaults.plugins, legend: { position: 'bottom', labels: { color:'#7a9ab8', font:{size:10}, padding:8, boxWidth:10 } } },
+      cutout: '60%'
+    }
+  });
+}
+
+// ===== SPARKLINES =====
+function buildSparklines() {
+  const sparkData = [
+    [96,99,101,94,87],
+    [89,92,95,88,84],
+    [74,74,0,0,0],
+    [0,0,0,0,0]
+  ];
+  const sparkColors = ['#00c853','#ffd600','#ffd600','#00ADEF'];
+  sparkData.forEach((data, i) => {
+    const validData = data.filter(d => d > 0);
+    if (validData.length === 0) return;
+    new Chart(document.getElementById(`spark${i}`), {
+      type: 'line',
+      data: {
+        labels: validData.map((_,j)=>`G${j+1}`),
+        datasets: [{
+          data: validData.map(d => (d/101*100).toFixed(1)),
+          borderColor: sparkColors[i],
+          borderWidth: 2,
+          pointRadius: 2,
+          fill: true,
+          backgroundColor: `${sparkColors[i]}22`,
+          tension: 0.4,
+        }]
+      },
+      options: {
+        animation: false,
+        responsive: false,
+        plugins: { legend: {display:false}, tooltip:{enabled:false} },
+        scales: {
+          x: { display:false },
+          y: { display:false }
+        }
+      }
+    });
+  });
+}
+
+// ===== TABLE =====
+function buildTable() {
+  const tbody = document.getElementById('tableBody');
+  const weekColors = ['rgba(0,52,120,0.15)','rgba(0,100,160,0.1)','rgba(0,52,120,0.15)','rgba(0,100,160,0.1)'];
+  
+  days.forEach((day, i) => {
+    const tr = document.createElement('tr');
+    const pct = actuals[i] > 0 ? (actuals[i]/101*100).toFixed(1) : null;
+    const sap = sapmalar[i];
+    const pctClass = !pct ? 'status-na' : pct >= 95 ? 'pct-high' : pct >= 80 ? 'pct-mid' : 'pct-low';
+    const statIcon = !pct ? '<span class="status-na">—</span>' :
+      sap <= 0 ? '<span class="status-ok">✅</span>' :
+      sap <= 10 ? '<span class="status-warn">🟡</span>' :
+                  '<span class="status-bad">🔴</span>';
+
+    const barWidth = pct ? Math.round(parseFloat(pct)) : 0;
+    const barColor = !pct ? '#333' : barWidth >= 95 ? '#00c853' : barWidth >= 80 ? '#ffd600' : '#ff1744';
+    const wk = Math.floor(i/5);
+
+    tr.style.background = weekColors[wk];
+    tr.innerHTML = `
+      <td>${day}</td>
+      <td>101</td>
+      <td>${actuals[i] || '—'}</td>
+      <td style="font-family:'Barlow Condensed';font-weight:700;color:${sap<=0?'#00c853':sap<=10?'#ffd600':'#ff1744'}">${actuals[i]?sap:'—'}</td>
+      <td>${vpGiris[i] || '—'}</td>
+      <td>${sasiGiris[i] || '—'}</td>
+      <td>${kepGiris[i] || '—'}</td>
+      <td>${sepetY[i] || '—'}</td>
+      <td style="color:${eksikS[i]>0?'#ff9100':'#00c853'}">${actuals[i]?eksikS[i]:'—'}</td>
+      <td style="color:${durus[i]>120?'#ff1744':durus[i]>0?'#ffd600':'#00c853'}">${actuals[i]?durus[i]:'—'}</td>
+      <td class="pct-cell ${pctClass}">${pct ? pct+'%' : '—'}</td>
+      <td>${statIcon}</td>
+      <td class="mini-bar-cell">
+        <div class="mini-bar-wrap">
+          <div class="mini-bar-bg">
+            <div class="mini-bar-fill" style="width:${barWidth}%;background:${barColor}"></div>
+          </div>
+          <span style="font-size:10px;color:#7a9ab8;width:34px;text-align:right">${pct?pct+'%':'—'}</span>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+
+    // Staggered row reveal
+    setTimeout(() => tr.classList.add('row-visible'), 800 + i * 60);
+  });
+}
+</script>
+</body>
+</html>
